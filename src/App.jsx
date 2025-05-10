@@ -1,6 +1,6 @@
-// App.jsx
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+import * as THREE from 'three'
 import Dancer from './components/Dancer'
 import Zombie from './components/Zombie'
 import Stage from './components/Stage'
@@ -16,32 +16,32 @@ function App() {
 
   return (
     <Canvas
-      camera={{ position: [0, 7, 25], fov: 40 }}
-      style={{ background: '#eee' }}
       shadows
+      camera={{ position: [0, 7, 25], fov: 40 }}
+      style={{ background: '#111' }}
+      gl={{ toneMapping: THREE.ACESFilmicToneMapping }}
     >
-      {/* Lumières */}
+      {/* 🎵 Brume légère */}
+      <fog attach="fog" args={['#111', 20, 500]} />
+
+
       <ambientLight intensity={0.6} />
       <directionalLight position={[10, 15, 10]} intensity={1.2} castShadow />
 
-      {/* ✅ Sol réajouté, légèrement surélevé pour recouvrir le sol du modèle */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]} receiveShadow>
-        <planeGeometry args={[100, 0,5, 100]} />
-        <meshStandardMaterial color="#222" />
+      {/* Sol */}
+      <mesh position={[0, -0.3, 0]} receiveShadow>
+        <boxGeometry args={[400, 1, 400]} />
+        <meshStandardMaterial color="#555" />
       </mesh>
 
-      {/* Contrôle caméra */}
       <OrbitControls />
 
-      {/* Scène de concert */}
-      <Stage position={[-20, 0, -10]} scale={[5, 5, 5]} />
+      <Stage position={[-30, 0, -10]} scale={[5, 5, 5]} />
 
-      {/* Danseurs */}
       {positions.map((pos, i) => (
         <Dancer key={i} position={pos} />
       ))}
 
-      {/* Zombie */}
       <Zombie position={[0, 0, 5]} />
     </Canvas>
   )
